@@ -1,6 +1,6 @@
 import rebound as rb
 import numpy as np
-from celmech.nbody_simulation_utilities import align_simulation, set_time_step
+from celmech.nbody_simulation_utilities import align_simulation
 
 #T_inst = 3e4
 inc_scale = 1e-3
