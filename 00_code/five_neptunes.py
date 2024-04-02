@@ -2,7 +2,7 @@ import rebound as rb
 import numpy as np
 from celmech.nbody_simulation_utilities import align_simulation
 
-#T_inst = 3e4
+# test 1,2,3
 inc_scale = 1e-3
 
 def lammers_inst_law(t,m):
