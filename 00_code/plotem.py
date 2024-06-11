@@ -1,7 +1,6 @@
 import numpy as np
 from celmech.nbody_simulation_utilities import get_simarchive_integration_results
 from glob import glob
-#from matplotlib import pyplot as plt
 import rebound as rb
 from celmech.miscellaneous import linking_l
 def process_sa(sa,Nout):
