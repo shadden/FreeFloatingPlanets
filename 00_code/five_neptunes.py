@@ -30,7 +30,11 @@ def get_sim(t,m):
 if __name__=="__main__":
     import sys
     i = int(sys.argv[1])
-    T_inst = 10**np.random.uniform(4,5)
-    sim = get_sim(T_inst,5.15e-5)
-    sim.save_to_file("five_neptune_sim_{}.sa".format(i),walltime=10)
+    #T_inst = 10**np.random.uniform(4,5)
+    srcdir = "/fs/lustre/cita/hadden/06_free_floating_planets/03_simulations/"
+    file_name = srcdir + "five_neptune_sim_{}.sa".format(i)
+    print("Opening file {}".format(file_name))
+    sim = rb.Simulation(file_name)
+    sim.save_to_file(file_name, walltime=25.,delete_file=False)
+    print("Integrating...")
     sim.integrate(1e8)
