@@ -20,5 +20,5 @@ times,minq,energy = np.transpose([(sim.t,minq_of_sim(sim),sim.energy()) for sim 
 abs_dE = np.abs(energy[1:]-energy[:-1])
 max_dEbyE = np.max(abs_dE/np.abs(energy[0]))
 min_q = np.min(minq)
-datadir = "/cita/h/home-2/hadden/Projects/15_FreeFloatingPlanetProduction/03_data/"
+datadir = savedir #"/cita/h/home-2/hadden/Projects/15_FreeFloatingPlanetProduction/03_data/"
 np.save(datadir+"{}_{}_tfin_max_dE_min_q".format(planet_type,I),np.array((times[-1],max_dEbyE,min_q)))
