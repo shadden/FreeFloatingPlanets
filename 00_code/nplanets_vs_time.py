@@ -6,8 +6,6 @@ def count_bound(sim):
     orbits = sim.orbits(sim.particles[0])
     return np.sum([o.a>0 for o in orbits])
 
-
-
 planet_type = sys.argv[1]
 I = int(sys.argv[2])
 
@@ -18,11 +16,11 @@ E0 = sa[0].energy()
 times,counts,dE = [0],[Nlast],[0]
 for sim in sa:
     N = count_bound(sim)
-    if N != Nlast:
+    if N < Nlast:
         times.append(sim.t)
         counts.append(N)
         dE.append(np.abs(sim.energy()/E0 - 1))
-    Nlast = N
+        Nlast = N
 counts_and_dE_vs_time = np.transpose((times,counts,dE))
-datadir = savedir #"/cita/h/home-2/hadden/Projects/15_FreeFloatingPlanetProduction/03_data/"
+datadir = savedir
 np.save(datadir+"{}_{}_counts_and_dE_vs_time".format(planet_type,I),counts_and_dE_vs_time)
