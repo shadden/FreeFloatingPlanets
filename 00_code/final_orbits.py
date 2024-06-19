@@ -13,6 +13,6 @@ I = int(sys.argv[2])
 
 archive_file = savedir + "five_{}_sim_{}.sa".format(planet_type,I)
 sim = rb.Simulation(archive_file)
-datadir = "/cita/h/home-2/hadden/Projects/15_FreeFloatingPlanetProduction/03_data/"
+datadir = savedir
 orbits_arr = orbits_of_sim(sim)
 np.save(datadir+"{}_{}_final_orbits".format(planet_type,I),orbits_arr)
