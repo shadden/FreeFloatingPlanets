@@ -21,8 +21,9 @@ def crossing_time(sa):
     else:
         return np.nan
 archive_fi_str=savedir+"five_{}_sim_{}.sa"
-crossing_times = np.zeros(100)
-for i in range(100):
+Nsim = 20 if planet_type=='j2neptune' else 100
+crossing_times = np.zeros(Nsim)
+for i in range(Nsim):
     print(i)
     sa = rb.Simulationarchive(archive_fi_str.format(planet_type,i))
     crossing_times[i] = crossing_time(sa)
