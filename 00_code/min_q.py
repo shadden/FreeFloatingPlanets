@@ -15,8 +15,14 @@ planet_type = sys.argv[1]
 I = int(sys.argv[2])
 
 archive_file = savedir + "five_{}_sim_{}.sa".format(planet_type,I)
-sa = rb.Simulationarchive(archive_file)
-times,minq,energy = np.transpose([(sim.t,minq_of_sim(sim),sim.energy()) for sim in sa])
+if planet_type=='j2neptune':
+    import reboundx as rbx
+    rebx_file = savedir + "j2_five_neptune_sim_{}_extras.bin".format(I)
+    sa = rbx.Simulationarchive(archive_file,rebx_file)
+    times,minq,energy = np.transpose([(sim.t,minq_of_sim(sim),sim.energy() + xtra.gravitational_harmonics_potential()) for sim,xtra in sa])
+else:
+    sa = rb.Simulationarchive(archive_file)
+    times,minq,energy = np.transpose([(sim.t,minq_of_sim(sim),sim.energy()) for sim in sa])
 abs_dE = np.abs(energy[1:]-energy[:-1])
 max_dEbyE = np.max(abs_dE/np.abs(energy[0]))
 min_q = np.min(minq)
