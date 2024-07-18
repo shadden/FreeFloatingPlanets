@@ -39,7 +39,7 @@ if __name__=="__main__":
     i = int(sys.argv[1])
     #T_inst = 10**np.random.uniform(4,5)
     srcdir = "/fs/lustre/cita/hadden/06_free_floating_planets/03_simulations/"
-    file_name = srcdir + "j2_five_neptune_sim_{}.sa".format(i)
+    file_name = srcdir + "five_j2neptune_sim_{}.sa".format(i)
     extras_file_name = srcdir + "j2_five_neptune_sim_{}_extras.bin".format(i)
 
     try:
