@@ -61,33 +61,28 @@ def process_sa(sa,outfile):
     sim0 = sa[0]
     E0 = sim0.energy()
     tcross=np.inf
-    
-    Nbound = 5
-    eject_times=[0.]
-    counts=[Nbound]
 
-    
     dE_by_E_max = 0
     dE_times = []
     dE_values = []
 
-    min_q = np.inf    
+    min_q = np.inf
     min_q_times = []
     min_q_values = []
 
-    for sim in sa:
-        
+    N = len(sa)
+    sma = np.zeros((5,N))
+    times = np.zeros(N)
+    for i,sim in enumerate(sa):
+        # record semi-major axes
+        orbits = sim.orbits(primary=sim.particles[0])
+        times[i] = sim.t
+        sma[:,i] = [o.a for o in orbits]
+
         # get first orbit crossing
         if  tcross==np.inf and count_links(sim)>0:
             tcross=sim.t
-        
-        # track number of bound planets
-        N1 = count_bound(sim)
-        if N1 < Nbound:
-            Nbound = N1
-            eject_times.append(sim.t)
-            counts.append(Nbound)
-        
+
         # track max energy error
         dE_by_E = np.abs(sim.energy()/E0 - 1)
         if dE_by_E > dE_by_E_max:
@@ -113,16 +108,16 @@ def process_sa(sa,outfile):
     dE_times.append(final_time)
     dE_values.append(dE_by_E_max)
 
-    eject_times.append(final_sim.t)    
-    counts.append(Nbound)
-
+    t_ej = np.unique(np.sort([times[(sma[j]>0).nonzero()[0][-1]] for j in range(5)]))
+    if t_ej[0] <  tcross and tcross<np.inf:
+        tcross=t_ej[0]
     np.savez_compressed(outfile,
                         min_q_times=min_q_times,
                         min_q_values=min_q_values,
                         dE_times=dE_times,
                         dE_values=dE_values,
-                        eject_times=eject_times,
-                        Nbound=counts,
+                        eject_times=t_ej,
+                        Nbound=count_bound(final_sim),
                         final_amd_coeffs=amd_coeffs,
                         final_orbits=orbits_of_sim(final_sim),
                         tcross=tcross,
