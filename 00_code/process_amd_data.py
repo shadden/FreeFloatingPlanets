@@ -32,17 +32,23 @@ if __name__=="__main__":
     import sys
     SIMTYPE=int(sys.argv[1])
     sim_family = ("five_neptune_sim","five_3neptune_sim","five_saturn_sim","five_30neptune_sim","ten_neptunes_plus_jupiter_sim")[SIMTYPE]
-    for I in range(100):
+    crossing_times_data = np.load("/fs/lustre/cita/hadden/06_free_floating_planets/05_summary_data/crossing_times.npz")
+    crossing_times_keys=['neptune', '3neptune', 'saturn', '30neptune', '1j10n']
+    crossing_times = crossing_times_data[crossing_times_keys[SIMTYPE]]
+    for I in range(101):
         print(I)
         archive_file = savedir + "{}_{}.sa".format(sim_family,I)
         sa = rb.Simulationarchive(archive_file)
+        tcross = crossing_times[I]
+        if sa.tmax-tcross < 5e7:
+            continue 
         sim0 = sa[0]
         Npl = sim0.N-1
-        times = np.geomspace(1e5,sa.tmax,600)    
+        times = tcross + np.geomspace(5e4,5e7,400)    
         AMD_crit = np.zeros((times.size,Npl))
         AMD_pp = np.zeros((times.size,Npl))
         for i, sim in enumerate(sa.getSimulations(times)):
             sim_bound,bound_mask = bound_only_sim_copy(sim)
             AMD_pp[i,bound_mask],AMD_crit[i,bound_mask] = calculate_AMDs_and_AMD_crits(sim_bound)
 
-        np.savez_compressed(savedir+f"amd_data_{sim_family}_{I}",AMD_pp = AMD_pp, AMD_crit = AMD_crit)
+        np.savez_compressed(savedir+f"X_amd_data_{sim_family}_{I}",AMD_pp = AMD_pp, AMD_crit = AMD_crit)
